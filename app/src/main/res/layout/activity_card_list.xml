@@ -19,12 +19,12 @@
         android:text="Нажмите плюс, чтобы добавить первую карту"
         android:layout_below="@+id/tvTitle"
         android:textSize="18sp" />
-    <android.support.design.widget.FloatingAchionButton
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:src="@drawable/ic_action_add_card"
-        app:backgroundTint="#009788"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_action_add_card"
+            android:backgroundTint="#009788"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
 </RelativeLayout>
