@@ -18,12 +18,14 @@
         <EditText
             style="@style/etStyle"
             android:id="@+id/etNameCard"
+            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Название карты"
             />
         <EditText
             style="@style/etStyle"
+            android:maxLines="1"
             android:layout_below="@id/etNameCard"
             android:id="@+id/etCategory"
             android:layout_width="match_parent"
@@ -34,6 +36,7 @@
             style="@style/etStyle"
             android:layout_below="@id/etCategory"
             android:id="@+id/etSale"
+            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Процент скидки"
@@ -46,6 +49,7 @@
             android:fontFamily="@font/roboto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="btnAddCardClick"
             android:layout_below="@id/etSale"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="15dp"

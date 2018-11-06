@@ -10,25 +10,42 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends AppCompatActivity  {
     RelativeLayout noCard;
     RelativeLayout listCard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_list);
-        Switch switchCard = (Switch) findViewById(R.id.switchCard);
         noCard = (RelativeLayout) findViewById(R.id.rlNoCard);
         listCard = (RelativeLayout) findViewById(R.id.rlCard);
+
         noCard.setVisibility(View.VISIBLE);
-        if (switchCard != null) {
-            switchCard.setOnCheckedChangeListener(this);
+        try{
+        Bundle arguments = getIntent().getExtras();
+        Card card=(Card) arguments.getParcelable(Card.class.getSimpleName());
+
+        if (arguments == null||card==null) {
+            isCard(false);
+        }
+        else {
+            isCard(true);
+            final TextView tvNameCard = findViewById(R.id.tvNameCard);
+            final TextView tvCategory = findViewById(R.id.tvCategory);
+            final TextView tvSale = findViewById(R.id.tvSale);
+
+            tvNameCard.setText(card.getNameCard());
+            tvCategory.setText(card.getCategory());
+            tvSale.setText("Скидка "+card.getSale()+"%");}
+        }
+        catch (Exception ex){
+            Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
         }
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked){
+    public void isCard(boolean isCard) {
+        if(!isCard){
             listCard.setVisibility(View.GONE);
             noCard.setVisibility(View.VISIBLE);
         }
@@ -44,3 +61,4 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
     }
 }
+
