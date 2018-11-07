@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void btnAddCardClick(View view) {
-        Intent intent = new Intent(this, add_card.class);
+        Intent intent = new Intent(this, AddCard.class);
         startActivity(intent);
 
     }

@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class add_card extends AppCompatActivity {
+public class AddCard extends AppCompatActivity {
      EditText etNameCard;
      EditText etCategory;
      EditText etSale;

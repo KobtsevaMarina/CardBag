@@ -20,7 +20,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".add_card"></activity>"
+        <activity android:name=".AddCard"></activity>"
     </application>
 
 </manifest>

@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Процент скидки"
+            android:inputType="number"
             />
         <Button
             android:layout_marginTop="28dp"
