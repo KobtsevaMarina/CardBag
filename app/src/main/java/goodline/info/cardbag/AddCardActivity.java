@@ -3,6 +3,7 @@ package goodline.info.cardbag;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,22 +14,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AddCard extends AppCompatActivity {
-     EditText etNameCard;
-     EditText etCategory;
-     EditText etSale;
-
+public class AddCardActivity extends AppCompatActivity {
+    private EditText etNameCard;
+    private EditText etCategory;
+    private EditText etSale;
+    private static final int ADD_CATEGORY = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_card);
-
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Дабaвить карту");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         etNameCard = findViewById(R.id.etNameCard);
         etCategory = findViewById(R.id.etCategory);
@@ -47,8 +47,35 @@ public class AddCard extends AppCompatActivity {
         card.setNameCard(etNameCard.getText().toString());
         card.setCategory(etCategory.getText().toString());
         card.setSale(etSale.getText().toString());
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Card.class.getSimpleName(), card);
-        startActivity(intent);
+        setResult(RESULT_OK,intent);
+        finish();
+    }
+
+    public void etCategoryClick(View view) {
+            Intent intent = new Intent(this, CategoryListActivity.class);
+            startActivityForResult(intent,ADD_CATEGORY);
+    }
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            return;
+        }
+        else try{
+            Bundle arguments = data.getExtras();
+            Category category = (Category) arguments.getParcelable(Category.class.getSimpleName());
+            if (arguments == null||category==null||resultCode!=RESULT_OK) {
+                return;
+            }
+            else {
+                String id = Integer.toString(category.getId());
+                etCategory.setHint(category.getName());
+            }
+        }
+        catch (Exception ex){
+            Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
+        }
     }
 }

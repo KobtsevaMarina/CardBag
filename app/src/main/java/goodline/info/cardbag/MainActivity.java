@@ -1,47 +1,35 @@
 package goodline.info.cardbag;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity  {
-    RelativeLayout noCard;
-    RelativeLayout listCard;
+    private TextView tvNameCard;
+    private TextView tvCategory;
+    private TextView tvSale;
+    private RelativeLayout noCard;
+    private RelativeLayout listCard;
+    private static final int ADD_CARD = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_list);
+        tvNameCard = findViewById(R.id.tvNameCard);
+        tvCategory = findViewById(R.id.tvCategory);
+        tvSale = findViewById(R.id.tvSale);
+
         noCard = (RelativeLayout) findViewById(R.id.rlNoCard);
         listCard = (RelativeLayout) findViewById(R.id.rlCard);
 
         noCard.setVisibility(View.VISIBLE);
-        try{
-        Bundle arguments = getIntent().getExtras();
-        Card card=(Card) arguments.getParcelable(Card.class.getSimpleName());
-
-        if (arguments == null||card==null) {
-            isCard(false);
-        }
-        else {
-            isCard(true);
-            final TextView tvNameCard = findViewById(R.id.tvNameCard);
-            final TextView tvCategory = findViewById(R.id.tvCategory);
-            final TextView tvSale = findViewById(R.id.tvSale);
-
-            tvNameCard.setText(card.getNameCard());
-            tvCategory.setText(card.getCategory());
-            tvSale.setText("Скидка "+card.getSale()+"%");}
-        }
-        catch (Exception ex){
-            Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
-        }
     }
 
     public void isCard(boolean isCard) {
@@ -55,9 +43,32 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            return;
+        }
+        else try{
+            Bundle arguments = data.getExtras();
+            Card card=(Card) arguments.getParcelable(Card.class.getSimpleName());
+
+            if (arguments == null||card==null||resultCode!=RESULT_OK) {
+                return;
+            }
+            else {
+                isCard(true);
+                tvNameCard.setText(card.getNameCard());
+                tvCategory.setText(card.getCategory());
+                tvSale.setText("Скидка "+card.getSale()+"%");}
+        }
+        catch (Exception ex){
+            Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
+        }
+    }
     public void btnAddCardClick(View view) {
-        Intent intent = new Intent(this, AddCard.class);
-        startActivity(intent);
+        Intent intent = new Intent(this, AddCardActivity.class);
+        startActivityForResult(intent,ADD_CARD);
 
     }
 }

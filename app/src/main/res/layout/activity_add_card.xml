@@ -31,7 +31,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Категория"
-            />
+            android:cursorVisible="false"
+            android:longClickable="false"
+            android:onClick="etCategoryClick"
+            android:focusable="false"/>
         <EditText
             style="@style/etStyle"
             android:layout_below="@id/etCategory"
@@ -51,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="btnAddCardClick"
+            android:id="@+id/btnAddCard"
             android:layout_below="@id/etSale"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="15dp"
