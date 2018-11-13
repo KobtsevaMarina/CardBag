@@ -76,64 +76,14 @@
             android:textSize="18sp" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/rlCard"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvCardList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
             >
 
-            <TextView
-                android:id="@+id/tvNameCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="17dp"
-                android:layout_marginTop="22dp"
-                android:fontFamily="@font/roboto_medium"
-                android:text="Лента"
-                android:textColor="#333333"
-                android:textSize="20sp" />
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/imageCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvNameCard"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="12dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardCornerRadius="7dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
-                    android:minHeight="206dp"
-                    android:src="@drawable/card_lenta" />
-            </android.support.v7.widget.CardView>
-
-            <TextView
-                android:id="@+id/tvCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Супермаркеты"
-                android:layout_below="@id/imageCard"
-                android:layout_marginLeft="17dp"
-                android:textColor="#9B9B9B"
-                />
-
-            <TextView
-                android:id="@+id/tvSale"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/imageCard"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="26sp"
-                android:textColor="@color/colorAccent"
-                android:text="Скидка 10%"/>
-        </RelativeLayout>
+        </android.support.v7.widget.RecyclerView>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btnAddCard"

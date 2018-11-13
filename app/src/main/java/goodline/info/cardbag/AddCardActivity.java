@@ -46,7 +46,7 @@ public class AddCardActivity extends AppCompatActivity {
         Card card = new Card();
         card.setNameCard(etNameCard.getText().toString());
         card.setCategory(etCategory.getText().toString());
-        card.setSale(etSale.getText().toString());
+        card.setSale("Скидка "+etSale.getText().toString()+"%");
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Card.class.getSimpleName(), card);
@@ -70,8 +70,7 @@ public class AddCardActivity extends AppCompatActivity {
                 return;
             }
             else {
-                String id = Integer.toString(category.getId());
-                etCategory.setHint(category.getName());
+                etCategory.setText(category.getName());
             }
         }
         catch (Exception ex){

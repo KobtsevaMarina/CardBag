@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Категория"
+            android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
             android:cursorVisible="false"
             android:longClickable="false"
             android:onClick="etCategoryClick"

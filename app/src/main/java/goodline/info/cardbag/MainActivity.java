@@ -4,17 +4,25 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
     private TextView tvNameCard;
     private TextView tvCategory;
     private TextView tvSale;
     private RelativeLayout noCard;
-    private RelativeLayout listCard;
+    private RecyclerView rvCardList;
+    private CardsAdapter adapter;
+    private List<Card> cardList;
     private static final int ADD_CARD = 1;
 
     @Override
@@ -27,19 +35,25 @@ public class MainActivity extends AppCompatActivity  {
         tvSale = findViewById(R.id.tvSale);
 
         noCard = (RelativeLayout) findViewById(R.id.rlNoCard);
-        listCard = (RelativeLayout) findViewById(R.id.rlCard);
+        rvCardList = (RecyclerView) findViewById(R.id.rvCardList);
 
         noCard.setVisibility(View.VISIBLE);
+        cardList = new ArrayList<>();
+        rvCardList.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new CardsAdapter(this, cardList);
+        // устанавливаем для списка адаптер
+        rvCardList.setAdapter(adapter);
     }
 
     public void isCard(boolean isCard) {
         if(!isCard){
-            listCard.setVisibility(View.GONE);
+            rvCardList.setVisibility(View.GONE);
             noCard.setVisibility(View.VISIBLE);
         }
         else {
             noCard.setVisibility(View.GONE);
-            listCard.setVisibility(View.VISIBLE);
+            rvCardList.setVisibility(View.VISIBLE);
         }
     }
 
@@ -58,9 +72,12 @@ public class MainActivity extends AppCompatActivity  {
             }
             else {
                 isCard(true);
-                tvNameCard.setText(card.getNameCard());
-                tvCategory.setText(card.getCategory());
-                tvSale.setText("Скидка "+card.getSale()+"%");}
+                try {
+                    adapter.insertItem(card);
+                }
+                catch (Exception ex){
+                    Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
+                }}
         }
         catch (Exception ex){
             Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
