@@ -2,6 +2,7 @@ package goodline.info.cardbag;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +11,19 @@ import android.view.ViewGroup;
 import java.util.List;
 
 public class CardsAdapter extends RecyclerView.Adapter<CardsVH>{
+    private MainActivity mainActivity;
     private List<Card> cards;
     private LayoutInflater inflater;
+    private RecyclerView rvImageCard;
+    private ImageCardAdapter ivAdapter;
+    private Context context;
 
-    public CardsAdapter(Context context, List<Card> cards) {
+    public CardsAdapter(Context context, List<Card> cards, RecyclerView recyclerView) {
         this.cards = cards;
         this.inflater = LayoutInflater.from(context);
+        mainActivity=(MainActivity) context;
+        this.context=context;
+        rvImageCard=recyclerView;
     }
 
     @NonNull
@@ -27,17 +35,16 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsVH>{
 
     @Override
     public void onBindViewHolder(@NonNull CardsVH cardsVH, int position) {
-        final Card cardItem = cards.get(position);
+        Card cardItem = cards.get(position);
         cardsVH.tvNameCard.setText(cardItem.getNameCard());
         cardsVH.tvCategory.setText(cardItem.getCategory());
         cardsVH.tvSale.setText(cardItem.getSale());
+        rvImageCard.setLayoutManager(new LinearLayoutManager(context));
+        ivAdapter = new ImageCardAdapter(context, cards);
+        rvImageCard.setAdapter(ivAdapter);
     }
     public void insertItem(Card item) {
-        // Добавить экземпляр класса ChatItem в коллекцию объектов сразу после
-        //первого элемента.
         cards.add(item);
-        // Обновить адаптер. Вызывав этот метод, в списке recyclerView будет
-        ///отрисовано добавление нового элемента
         notifyDataSetChanged();
     }
 

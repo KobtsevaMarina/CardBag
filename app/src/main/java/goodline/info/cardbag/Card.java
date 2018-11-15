@@ -7,6 +7,7 @@ public class Card implements Parcelable {
     private String nameCard;
     private String category;
     private String sale;
+    private Integer[] imageId;
 
     protected Card(Parcel in) {
         nameCard = in.readString();
@@ -64,5 +65,13 @@ public class Card implements Parcelable {
 
     public void setSale(String sale) {
         this.sale = sale;
+    }
+
+    public Integer[] getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Integer[] imageId) {
+        this.imageId = imageId;
     }
 }

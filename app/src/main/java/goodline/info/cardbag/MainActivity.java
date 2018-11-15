@@ -16,12 +16,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
-    private TextView tvNameCard;
-    private TextView tvCategory;
-    private TextView tvSale;
     private RelativeLayout noCard;
     private RecyclerView rvCardList;
     private CardsAdapter adapter;
+    private RecyclerView rvImageCard;
     private List<Card> cardList;
     private static final int ADD_CARD = 1;
 
@@ -30,19 +28,14 @@ public class MainActivity extends AppCompatActivity  {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_list);
-        tvNameCard = findViewById(R.id.tvNameCard);
-        tvCategory = findViewById(R.id.tvCategory);
-        tvSale = findViewById(R.id.tvSale);
 
         noCard = (RelativeLayout) findViewById(R.id.rlNoCard);
         rvCardList = (RecyclerView) findViewById(R.id.rvCardList);
-
+        rvImageCard=(RecyclerView) findViewById(R.id.rvCardImage);
         noCard.setVisibility(View.VISIBLE);
         cardList = new ArrayList<>();
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
-
-        adapter = new CardsAdapter(this, cardList);
-        // устанавливаем для списка адаптер
+        adapter = new CardsAdapter(this, cardList, rvImageCard);
         rvCardList.setAdapter(adapter);
     }
 

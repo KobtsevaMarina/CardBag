@@ -43,11 +43,14 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     public void btnAddCardClick(View view) {
+        Integer[] imageId= new Integer[2];
+        imageId[0]=R.drawable.card_lenta;
+        imageId[1]=R.drawable.card_lenta_back;
         Card card = new Card();
         card.setNameCard(etNameCard.getText().toString());
         card.setCategory(etCategory.getText().toString());
         card.setSale("Скидка "+etSale.getText().toString()+"%");
-
+        card.setImageId(imageId);
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Card.class.getSimpleName(), card);
         setResult(RESULT_OK,intent);
