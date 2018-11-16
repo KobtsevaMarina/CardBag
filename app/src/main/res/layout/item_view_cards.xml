@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Супермаркеты"
-        android:layout_below="@id/rvCard"
+        android:layout_below="@id/rvCardImage"
         android:layout_marginLeft="17dp"
         android:textColor="#9B9B9B"
         />
@@ -40,7 +40,7 @@
         android:id="@+id/tvSale"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rvCard"
+        android:layout_below="@id/rvCardImage"
         android:layout_alignParentRight="true"
         android:layout_marginRight="26sp"
         android:textColor="@color/colorAccent"
