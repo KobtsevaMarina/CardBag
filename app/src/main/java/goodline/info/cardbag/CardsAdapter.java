@@ -14,16 +14,14 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsVH>{
     private MainActivity mainActivity;
     private List<Card> cards;
     private LayoutInflater inflater;
-    private RecyclerView rvImageCard;
     private ImageCardAdapter ivAdapter;
     private Context context;
 
-    public CardsAdapter(Context context, List<Card> cards, RecyclerView recyclerView) {
+    public CardsAdapter(Context context, List<Card> cards) {
         this.cards = cards;
         this.inflater = LayoutInflater.from(context);
         mainActivity=(MainActivity) context;
         this.context=context;
-        rvImageCard=recyclerView;
     }
 
     @NonNull
@@ -39,9 +37,10 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsVH>{
         cardsVH.tvNameCard.setText(cardItem.getNameCard());
         cardsVH.tvCategory.setText(cardItem.getCategory());
         cardsVH.tvSale.setText(cardItem.getSale());
-        rvImageCard.setLayoutManager(new LinearLayoutManager(context));
+        cardsVH.rvImageCard.setLayoutManager(new LinearLayoutManager(context));
         ivAdapter = new ImageCardAdapter(context, cards);
-        rvImageCard.setAdapter(ivAdapter);
+        cardsVH.rvImageCard.setAdapter(ivAdapter);
+        mainActivity.isCard(true);
     }
     public void insertItem(Card item) {
         cards.add(item);

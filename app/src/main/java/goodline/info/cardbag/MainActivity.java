@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity  {
     private RelativeLayout noCard;
     private RecyclerView rvCardList;
     private CardsAdapter adapter;
-    private RecyclerView rvImageCard;
     private List<Card> cardList;
     private static final int ADD_CARD = 1;
 
@@ -31,11 +30,12 @@ public class MainActivity extends AppCompatActivity  {
 
         noCard = (RelativeLayout) findViewById(R.id.rlNoCard);
         rvCardList = (RecyclerView) findViewById(R.id.rvCardList);
-        rvImageCard=(RecyclerView) findViewById(R.id.rvCardImage);
+
         noCard.setVisibility(View.VISIBLE);
+
         cardList = new ArrayList<>();
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CardsAdapter(this, cardList, rvImageCard);
+        adapter = new CardsAdapter(this, cardList);
         rvCardList.setAdapter(adapter);
     }
 

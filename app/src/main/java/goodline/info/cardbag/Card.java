@@ -7,12 +7,14 @@ public class Card implements Parcelable {
     private String nameCard;
     private String category;
     private String sale;
-    private Integer[] imageId;
+    private int[] imageId = new int[2];
 
     protected Card(Parcel in) {
         nameCard = in.readString();
         category = in.readString();
         sale = in.readString();
+        imageId[0]=in.readInt();
+        imageId[1]=in.readInt();
     }
 
     public static final Creator<Card> CREATOR = new Creator<Card>() {
@@ -40,6 +42,8 @@ public class Card implements Parcelable {
         dest.writeString(nameCard);
         dest.writeString(category);
         dest.writeString(sale);
+        dest.writeInt(imageId[0]);
+        dest.writeInt(imageId[1]);
     }
 
 
@@ -67,11 +71,11 @@ public class Card implements Parcelable {
         this.sale = sale;
     }
 
-    public Integer[] getImageId() {
+    public int[] getImageId() {
         return imageId;
     }
 
-    public void setImageId(Integer[] imageId) {
+    public void setImageId(int[] imageId) {
         this.imageId = imageId;
     }
 }

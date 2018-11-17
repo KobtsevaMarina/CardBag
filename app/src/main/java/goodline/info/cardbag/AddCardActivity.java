@@ -43,7 +43,7 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     public void btnAddCardClick(View view) {
-        Integer[] imageId= new Integer[2];
+        int[] imageId= new int[2];
         imageId[0]=R.drawable.card_lenta;
         imageId[1]=R.drawable.card_lenta_back;
         Card card = new Card();
