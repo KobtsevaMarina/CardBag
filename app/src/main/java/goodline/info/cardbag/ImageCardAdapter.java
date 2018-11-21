@@ -11,10 +11,10 @@ import java.util.List;
 
 public class ImageCardAdapter extends RecyclerView.Adapter<ImageCardVH> {
 
-    private List<Card> cards;
+    private int[] cards;
     private LayoutInflater inflater;
 
-    public ImageCardAdapter(Context context, List<Card> cardList) {
+    public ImageCardAdapter(Context context, int[] cardList) {
         this.cards = cardList;
         this.inflater = LayoutInflater.from(context);
     }
@@ -28,13 +28,11 @@ public class ImageCardAdapter extends RecyclerView.Adapter<ImageCardVH> {
 
     @Override
     public void onBindViewHolder(@NonNull ImageCardVH imageCardVH, int position) {
-        Card cardItem = cards.get(position);
-        imageCardVH.imageFront.setImageResource(cardItem.getImageId()[0]);
-        imageCardVH.imageBack.setImageResource(cardItem.getImageId()[1]);
+        imageCardVH.imageFront.setImageResource(cards[position]);
     }
 
     @Override
     public int getItemCount() {
-        return cards.size();
+        return cards.length;
     }
 }

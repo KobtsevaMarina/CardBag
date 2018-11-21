@@ -7,11 +7,9 @@ import android.widget.ImageView;
 
 public class ImageCardVH extends RecyclerView.ViewHolder {
     public ImageView imageFront;
-    public ImageView imageBack;
 
     public ImageCardVH(@NonNull View itemView) {
         super(itemView);
         this.imageFront = itemView.findViewById(R.id.ivImageCardFront);
-        this.imageBack=itemView.findViewById(R.id.ivImageCardBack);
     }
 }

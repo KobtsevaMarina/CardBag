@@ -37,14 +37,15 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsVH>{
         cardsVH.tvNameCard.setText(cardItem.getNameCard());
         cardsVH.tvCategory.setText(cardItem.getCategory());
         cardsVH.tvSale.setText(cardItem.getSale());
-        cardsVH.rvImageCard.setLayoutManager(new LinearLayoutManager(context));
-        ivAdapter = new ImageCardAdapter(context, cards);
+        cardsVH.rvImageCard.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        ivAdapter = new ImageCardAdapter(context, cardItem.getImageId());
         cardsVH.rvImageCard.setAdapter(ivAdapter);
         mainActivity.isCard(true);
     }
     public void insertItem(Card item) {
-        cards.add(item);
-        notifyDataSetChanged();
+        int itemLast = cards.size();
+        cards.add(itemLast,item);
+        notifyItemInserted(itemLast);
     }
 
     @Override
