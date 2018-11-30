@@ -6,15 +6,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+import java.util.Random;
+
+import io.realm.Realm;
+
 public class AddCardActivity extends AppCompatActivity {
+
+    private Card card;
+    private List<Integer> photos;
     private EditText etNameCard;
     private EditText etCategory;
     private EditText etSale;
@@ -46,17 +51,44 @@ public class AddCardActivity extends AppCompatActivity {
         int[] imageId= new int[2];
         imageId[0]=R.drawable.card_lenta;
         imageId[1]=R.drawable.card_lenta_back;
-        Card card = new Card();
+
         card.setNameCard(etNameCard.getText().toString());
-        card.setCategory(etCategory.getText().toString());
+        Random random = new Random();
+        int id = random.nextInt(200000);
+        Category category = new Category(id,etCategory.getText().toString());
+        card.setCategory(category);
         card.setSale("Скидка "+etSale.getText().toString()+"%");
         card.setImageId(imageId);
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+            }
+        });
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Card.class.getSimpleName(), card);
         setResult(RESULT_OK,intent);
         finish();
     }
 
+    private CardRealm map2Realm(Card card) {
+        CardRealm cardRealm = new CardRealm();
+        cardRealm.setId(card.getId());
+        cardRealm.setNameCard(card.getNameCard());
+        cardRealm.setDiscount(card.getSale());
+        cardRealm.setCategory(categoreMap2Realm(card.getCategory()));
+        return cardRealm;
+    }
+
+    private CategoryRealm categoreMap2Realm(Category category) {
+        CategoryRealm categoryRealm = new CategoryRealm();
+        categoryRealm.setId(category.getId());
+        categoryRealm.setName(category.getName());
+        return categoryRealm;
+    }
     public void etCategoryClick(View view) {
             Intent intent = new Intent(this, CategoryListActivity.class);
             startActivityForResult(intent,ADD_CATEGORY);

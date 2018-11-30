@@ -4,15 +4,33 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Card implements Parcelable {
+    private  int id;
     private String nameCard;
-    private String category;
+    private Category category;
     private String sale;
     private int[] imageId = new int[2];
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     protected Card(Parcel in) {
         nameCard = in.readString();
-        category = in.readString();
+        category = (Category) in.readParcelable(Category.class.getClassLoader());
         sale = in.readString();
+
         imageId[0]=in.readInt();
         imageId[1]=in.readInt();
     }
@@ -40,7 +58,7 @@ public class Card implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(nameCard);
-        dest.writeString(category);
+        dest.writeParcelable(category, flags);
         dest.writeString(sale);
         dest.writeInt(imageId[0]);
         dest.writeInt(imageId[1]);
@@ -55,13 +73,6 @@ public class Card implements Parcelable {
         this.nameCard = nameCard;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
 
     public String getSale() {
         return sale;

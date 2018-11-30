@@ -5,6 +5,15 @@ import android.os.Parcelable;
 
 public class Category implements Parcelable {
     private int id;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     private String name;
 
     public Category(int id, String name) {

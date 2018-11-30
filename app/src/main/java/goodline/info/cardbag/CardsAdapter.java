@@ -35,7 +35,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsVH>{
     public void onBindViewHolder(@NonNull CardsVH cardsVH, int position) {
         Card cardItem = cards.get(position);
         cardsVH.tvNameCard.setText(cardItem.getNameCard());
-        cardsVH.tvCategory.setText(cardItem.getCategory());
+        cardsVH.tvCategory.setText(cardItem.getCategory().getName());
         cardsVH.tvSale.setText(cardItem.getSale());
         cardsVH.rvImageCard.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         ivAdapter = new ImageCardAdapter(context, cardItem.getImageId());
