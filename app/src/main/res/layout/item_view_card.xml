@@ -20,7 +20,7 @@
         <ImageView
             android:id="@+id/ivImageCardFront"
             android:layout_width="270dp"
-            android:layout_height="168dp"
+            android:layout_height="190dp"
             android:scaleType="centerCrop"
             android:src="@drawable/card_lenta" />
     </android.support.v7.widget.CardView>

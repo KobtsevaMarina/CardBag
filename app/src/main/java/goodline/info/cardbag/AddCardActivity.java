@@ -38,7 +38,7 @@ public class AddCardActivity extends AppCompatActivity {
         etNameCard = findViewById(R.id.etNameCard);
         etCategory = findViewById(R.id.etCategory);
         etSale = findViewById(R.id.etSale);
-
+        card = new Card();
     }
 
     @Override
