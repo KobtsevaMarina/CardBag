@@ -1,5 +1,6 @@
 package goodline.info.cardbag;
 
+import android.accounts.NetworkErrorException;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,21 +35,19 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         RecyclerView recyclerView = findViewById(R.id.rvCategoryList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<Category> categoriesRest = categories;
+        List<Category> categoriesRest = null;
         List <CategoryRealm> categoriesLocal = null;
         List<Category> categories = new ArrayList<>();
 
         //categoriesLocal = getCategoriesFromLocal();
         //categoriesRest = getCategoriesFromRemote();
-
+        categoriesLocal = getCategoriesFromLocal();
 
         //if(categoriesLocal == null || categoriesLocal.isEmpty())
         //{
         categoriesRest = getCategoriesFromRemote();
         addCategories(categoriesRest);
         //}
-
-        categoriesRest = getCategoriesFromRemote();
         if(categoriesRest == null) {
             Toast.makeText(this, "Ошибка сервера", Toast.LENGTH_LONG).show();
             return;
@@ -58,7 +57,7 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         }
 
         categoriesLocal = getCategoriesFromLocal();
-        categories = map2Data(categoriesLocal);
+        categories  = map2DataList(categoriesLocal);
 
         CategoryListAdapter adapter = new CategoryListAdapter(this, categoriesRest, this);
         // устанавливаем для списка адаптер
@@ -85,7 +84,7 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         return realmList;
     }
 
-    private List <Category> map2Data(List<CategoryRealm> realmList) {
+    private List <Category> map2DataList(List<CategoryRealm> realmList) {
         List<Category> categories = new ArrayList<>();
         for(CategoryRealm categoryRealm : realmList) {
             Category category = new Category(

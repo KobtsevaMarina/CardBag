@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class MainActivity extends AppCompatActivity  {
     private RelativeLayout noCard;
     private RecyclerView rvCardList;
@@ -35,10 +38,18 @@ public class MainActivity extends AppCompatActivity  {
 
         cardList = new ArrayList<>();
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
+        cardList = map2DataList(getCardList());
+
+        if (cardList == null || cardList.isEmpty()){
+            isCard(false);
+        }
+
         adapter = new CardsAdapter(this, cardList);
         rvCardList.setAdapter(adapter);
     }
-
+    private RealmResults<CardRealm> getCardList() {
+        return Realm.getDefaultInstance().where(CardRealm.class).findAll();
+    }
     public void isCard(boolean isCard) {
         if(!isCard){
             rvCardList.setVisibility(View.GONE);
@@ -50,7 +61,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) {
@@ -75,11 +86,41 @@ public class MainActivity extends AppCompatActivity  {
         catch (Exception ex){
             Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
         }
-    }
+    }*/
     public void btnAddCardClick(View view) {
         Intent intent = new Intent(this, AddCardActivity.class);
-        startActivityForResult(intent,ADD_CARD);
-
+        startActivity(intent);
+        finish();
+    }
+    private List<Card> map2DataList(List<CardRealm> realmList) {
+        List<Card> cards = new ArrayList<>();
+        for (CardRealm cardRealm : realmList) {
+            Card card = new Card (
+                    cardRealm.getId(),
+                    cardRealm.getNameCard(),
+                    categoryMap2Data(cardRealm.getCategory()),
+                    cardRealm.getDiscount(),
+            (ArrayList) photoMap2Data(cardRealm.getPhotoList())
+            );
+            cards.add(card);
+        }
+        return cards;
+    }
+    private List<Photo> photoMap2Data(List<PhotoRealm> realmList) {
+        List<Photo> photos = new ArrayList<>();
+        for (PhotoRealm photoRealm : realmList) {
+            Photo photo = new Photo(
+                    photoRealm.getImageID()
+            );
+            photos.add(photo);
+        }
+        return photos;
+    }
+    private Category categoryMap2Data(CategoryRealm categoryRealm) {
+        Category category = new Category();
+        category.setId(categoryRealm.getId());
+        category.setName(categoryRealm.getName());
+        return category;
     }
 }
 

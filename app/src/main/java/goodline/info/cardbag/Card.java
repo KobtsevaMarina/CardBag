@@ -3,12 +3,27 @@ package goodline.info.cardbag;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Card implements Parcelable {
     private  int id;
     private String nameCard;
     private Category category;
     private String sale;
-    private int[] imageId = new int[2];
+    private List<Photo> photoList;
+
+    public List<Photo> getPhotoList() {
+        return photoList;
+    }
+
+    public void setPhotoList(List<Photo> photoList) {
+        this.photoList = photoList;
+    }
+
+    public static Creator<Card> getCREATOR() {
+        return CREATOR;
+    }
 
     public int getId() {
         return id;
@@ -30,10 +45,10 @@ public class Card implements Parcelable {
         nameCard = in.readString();
         category = (Category) in.readParcelable(Category.class.getClassLoader());
         sale = in.readString();
-
-        imageId[0]=in.readInt();
-        imageId[1]=in.readInt();
+        photoList = new ArrayList<>();
+        in.readList(photoList, getClass().getClassLoader());
     }
+
 
     public static final Creator<Card> CREATOR = new Creator<Card>() {
         @Override
@@ -47,7 +62,18 @@ public class Card implements Parcelable {
         }
     };
     public Card() {
-
+        id = 0;
+        nameCard = null;
+        category = null;
+        sale = null;
+        photoList = null;
+    }
+    public Card(int id, String nameCard, Category category, String sale, List<Photo> photoList) {
+        this.id = id;
+        this.nameCard = nameCard;
+        this.category = category;
+        this.sale = sale;
+        this.photoList = photoList;
     }
 
     @Override
@@ -60,8 +86,7 @@ public class Card implements Parcelable {
         dest.writeString(nameCard);
         dest.writeParcelable(category, flags);
         dest.writeString(sale);
-        dest.writeInt(imageId[0]);
-        dest.writeInt(imageId[1]);
+        dest.writeList(photoList);
     }
 
 
@@ -82,11 +107,4 @@ public class Card implements Parcelable {
         this.sale = sale;
     }
 
-    public int[] getImageId() {
-        return imageId;
-    }
-
-    public void setImageId(int[] imageId) {
-        this.imageId = imageId;
-    }
 }

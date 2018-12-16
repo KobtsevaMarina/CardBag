@@ -5,12 +5,12 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class CardRealm extends RealmObject {
-
+    @PrimaryKey
     private int id;
     private String nameCard;
     private CategoryRealm category;
-    private String discount;
-    private RealmList<Integer> photos;
+    private String sale;
+    private RealmList<PhotoRealm> photoList;
 
     public String getNameCard() {
         return nameCard;
@@ -28,20 +28,13 @@ public class CardRealm extends RealmObject {
         this.category = category;
     }
 
-    public String getDiscount() {
-        return discount;
+
+    public RealmList<PhotoRealm> getPhotoList() {
+        return photoList;
     }
 
-    public void setDiscount(String discount) {
-        this.discount = discount;
-    }
-
-    public RealmList<Integer> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(RealmList<Integer> photos) {
-        this.photos = photos;
+    public void setPhotoList(RealmList<PhotoRealm> photoList) {
+        this.photoList = photoList;
     }
 
     public int getId() {
@@ -50,5 +43,13 @@ public class CardRealm extends RealmObject {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getSale() {
+        return sale;
+    }
+
+    public void setSale(String sale) {
+        this.sale = sale;
     }
 }

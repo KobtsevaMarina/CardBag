@@ -34,12 +34,16 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsVH>{
     @Override
     public void onBindViewHolder(@NonNull CardsVH cardsVH, int position) {
         Card cardItem = cards.get(position);
+
+        PhotoAdapter photoListAdapter = new PhotoAdapter(context, cardItem.getPhotoList());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        cardsVH.rvImageCard.setLayoutManager(linearLayoutManager);
+        cardsVH.rvImageCard.setAdapter(photoListAdapter);
+
         cardsVH.tvNameCard.setText(cardItem.getNameCard());
         cardsVH.tvCategory.setText(cardItem.getCategory().getName());
         cardsVH.tvSale.setText(cardItem.getSale());
-        cardsVH.rvImageCard.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        ivAdapter = new ImageCardAdapter(context, cardItem.getImageId());
-        cardsVH.rvImageCard.setAdapter(ivAdapter);
+
         mainActivity.isCard(true);
     }
     public void insertItem(Card item) {

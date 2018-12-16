@@ -3,14 +3,14 @@ package goodline.info.cardbag;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+import io.realm.RealmList;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -48,9 +48,10 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     public void btnAddCardClick(View view) {
-        int[] imageId= new int[2];
-        imageId[0]=R.drawable.card_lenta;
-        imageId[1]=R.drawable.card_lenta_back;
+        List<Photo> photoList = Arrays.asList(
+                new Photo(R.drawable.card_lenta),
+                new Photo(R.drawable.card_lenta_back)
+        );
 
         card.setNameCard(etNameCard.getText().toString());
         Random random = new Random();
@@ -58,29 +59,42 @@ public class AddCardActivity extends AppCompatActivity {
         Category category = new Category(id,etCategory.getText().toString());
         card.setCategory(category);
         card.setSale("Скидка "+etSale.getText().toString()+"%");
-        card.setImageId(imageId);
+        card.setPhotoList(photoList);
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-
+                realm.copyToRealmOrUpdate(cardMap2Realm(card));
             }
         });
+        realm.close();
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Card.class.getSimpleName(), card);
         setResult(RESULT_OK,intent);
+        startActivity(intent);
         finish();
     }
 
-    private CardRealm map2Realm(Card card) {
+    private CardRealm cardMap2Realm(Card card) {
         CardRealm cardRealm = new CardRealm();
         cardRealm.setId(card.getId());
         cardRealm.setNameCard(card.getNameCard());
         cardRealm.setDiscount(card.getSale());
         cardRealm.setCategory(categoreMap2Realm(card.getCategory()));
+        cardRealm.setPhotoList(photoMap2Realm(card.getPhotoList()));
         return cardRealm;
+    }
+    private RealmList<PhotoRealm> photoMap2Realm(List <Photo> photo)
+    {
+        RealmList <PhotoRealm> photoRealm = new RealmList<>();
+        for(Photo photos: photo) {
+            PhotoRealm photoRealm1 = new PhotoRealm();
+            photoRealm1.setImageID(photos.getImageID());
+            photoRealm.add(photoRealm1);
+        }
+        return photoRealm;
     }
 
     private CategoryRealm categoreMap2Realm(Category category) {
@@ -93,7 +107,7 @@ public class AddCardActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CategoryListActivity.class);
             startActivityForResult(intent,ADD_CATEGORY);
     }
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+   /* protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) {
             return;
@@ -111,5 +125,5 @@ public class AddCardActivity extends AppCompatActivity {
         catch (Exception ex){
             Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
         }
-    }
+    }*/
 }

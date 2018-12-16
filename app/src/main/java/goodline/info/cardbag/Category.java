@@ -25,7 +25,10 @@ public class Category implements Parcelable {
         this.id = in.readInt();
         this.name = in.readString();
     }
-
+    protected Category() {
+        id = 0;
+        name = null;
+    }
 
     public static final Creator<Category> CREATOR = new Creator<Category>() {
         @Override
