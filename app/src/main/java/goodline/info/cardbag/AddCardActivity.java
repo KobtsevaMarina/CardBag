@@ -81,7 +81,7 @@ public class AddCardActivity extends AppCompatActivity {
         CardRealm cardRealm = new CardRealm();
         cardRealm.setId(card.getId());
         cardRealm.setNameCard(card.getNameCard());
-        cardRealm.setDiscount(card.getSale());
+        cardRealm.setSale(card.getSale());
         cardRealm.setCategory(categoreMap2Realm(card.getCategory()));
         cardRealm.setPhotoList(photoMap2Realm(card.getPhotoList()));
         return cardRealm;
