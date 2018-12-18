@@ -12,6 +12,14 @@ public class CardRealm extends RealmObject {
     private String sale;
     private RealmList<PhotoRealm> photoList;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getNameCard() {
         return nameCard;
     }
@@ -28,6 +36,13 @@ public class CardRealm extends RealmObject {
         this.category = category;
     }
 
+    public String getSale() {
+        return sale;
+    }
+
+    public void setSale(String sale) {
+        this.sale = sale;
+    }
 
     public RealmList<PhotoRealm> getPhotoList() {
         return photoList;
@@ -35,21 +50,5 @@ public class CardRealm extends RealmObject {
 
     public void setPhotoList(RealmList<PhotoRealm> photoList) {
         this.photoList = photoList;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getSale() {
-        return sale;
-    }
-
-    public void setSale(String sale) {
-        this.sale = sale;
     }
 }

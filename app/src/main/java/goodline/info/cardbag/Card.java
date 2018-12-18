@@ -11,7 +11,7 @@ public class Card implements Parcelable {
     private String nameCard;
     private Category category;
     private String sale;
-    private List<Photo> photoList;
+    public List<Photo> photoList;
 
     public List<Photo> getPhotoList() {
         return photoList;

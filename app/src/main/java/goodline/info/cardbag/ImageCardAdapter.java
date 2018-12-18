@@ -28,7 +28,7 @@ public class ImageCardAdapter extends RecyclerView.Adapter<ImageCardVH> {
 
     @Override
     public void onBindViewHolder(@NonNull ImageCardVH imageCardVH, int position) {
-        imageCardVH.imageFront.setImageResource(cards.get(position).getImageID());
+      //  imageCardVH.imageFront.setImageResource(cards.get(position).getImageID());
     }
 
     @Override

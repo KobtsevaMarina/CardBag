@@ -4,14 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Photo implements Parcelable {
-    private int imageID;
+    private long imageID;
 
     public Photo(){
 
         imageID = 0;
     }
 
-    public Photo(int imageID) {
+    public Photo(long imageID) {
 
         this.imageID = imageID;
     }
@@ -33,7 +33,7 @@ public class Photo implements Parcelable {
         }
     };
 
-    public int getImageID() {
+    public long getImageID() {
 
         return imageID;
     }
@@ -45,6 +45,6 @@ public class Photo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(imageID);
+        dest.writeLong(imageID);
     }
 }

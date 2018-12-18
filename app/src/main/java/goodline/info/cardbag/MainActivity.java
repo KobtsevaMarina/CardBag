@@ -18,6 +18,8 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static io.realm.Realm.getDefaultInstance;
+
 public class MainActivity extends AppCompatActivity  {
     private RelativeLayout noCard;
     private RecyclerView rvCardList;
@@ -48,7 +50,14 @@ public class MainActivity extends AppCompatActivity  {
         rvCardList.setAdapter(adapter);
     }
     private RealmResults<CardRealm> getCardList() {
-        return Realm.getDefaultInstance().where(CardRealm.class).findAll();
+        try{
+        RealmResults<CardRealm> result = getDefaultInstance().where(CardRealm.class).findAll();
+
+        }
+        catch (Exception ex){
+            String message = ex.getMessage();
+        }
+        return  null;
     }
     public void isCard(boolean isCard) {
         if(!isCard){
@@ -61,7 +70,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-   /* @Override
+   @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) {
@@ -86,7 +95,7 @@ public class MainActivity extends AppCompatActivity  {
         catch (Exception ex){
             Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
         }
-    }*/
+    }
     public void btnAddCardClick(View view) {
         Intent intent = new Intent(this, AddCardActivity.class);
         startActivity(intent);
@@ -99,13 +108,14 @@ public class MainActivity extends AppCompatActivity  {
                     cardRealm.getId(),
                     cardRealm.getNameCard(),
                     categoryMap2Data(cardRealm.getCategory()),
-                    cardRealm.getDiscount(),
+                    cardRealm.getSale(),
             (ArrayList) photoMap2Data(cardRealm.getPhotoList())
             );
             cards.add(card);
         }
         return cards;
     }
+
     private List<Photo> photoMap2Data(List<PhotoRealm> realmList) {
         List<Photo> photos = new ArrayList<>();
         for (PhotoRealm photoRealm : realmList) {

@@ -31,7 +31,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder viewHolder, int position) {
         final Photo photo = photos.get(position);
-        viewHolder.ivCardFront.setImageDrawable(context.getResources().getDrawable(photo.getImageID()));
+        //viewHolder.ivCardFront.setImageDrawable(context.getResources().getDrawable(photo.getImageID()));
     }
 
     @Override

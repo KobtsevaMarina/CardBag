@@ -2,14 +2,23 @@ package goodline.info.cardbag;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+
 import io.realm.RealmList;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -23,7 +32,12 @@ public class AddCardActivity extends AppCompatActivity {
     private EditText etNameCard;
     private EditText etCategory;
     private EditText etSale;
-    private static final int ADD_CATEGORY = 1;
+    private static final int ADD_CATEGORY = 0;
+    private final int REQUEST_CODE_PICK_IMAGE_GALLARY = 1;
+    private final int REQUEST_CODE_FRONT_PHOTO = 1;
+    private final int REQUEST_CODE_BACK_PHOTO = 2;
+    ImageView ivPhotoFront, ivPhotoBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +53,88 @@ public class AddCardActivity extends AppCompatActivity {
         etCategory = findViewById(R.id.etCategory);
         etSale = findViewById(R.id.etSale);
         card = new Card();
+        findViewById(R.id.flFronPhoto).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImagGromGallery(REQUEST_CODE_FRONT_PHOTO);
+            }
+        });
+
+        findViewById(R.id.flBackPhoto).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImagGromGallery(REQUEST_CODE_BACK_PHOTO);
+            }
+        });
+        ivPhotoFront = findViewById(R.id.ivPhotoFront);
+        ivPhotoBack = findViewById(R.id.ivPhotoBack);
+        long currentTime = System.currentTimeMillis();
+
+        card.photoList = new ArrayList<>();
+       // card.photoList.add(photoFront);
+       // card.photoList.add(photoBack);
+    }
+
+    private void showImage(int requestCode, Intent data) {
+        try {
+            //Получаем URI изображения, преобразуем его в Bitmap
+            //объект и отображаем в элементе ImageView нашего интерфейса:
+            final Uri imageUri = data.getData();
+            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+            switch (requestCode) {
+                case REQUEST_CODE_FRONT_PHOTO:
+                    ivPhotoFront.setImageBitmap(selectedImage);
+                    break;
+                case REQUEST_CODE_BACK_PHOTO:
+                    ivPhotoBack.setImageBitmap(selectedImage);
+                    break;
+            }
+
+        } catch (FileNotFoundException e) {
+            // Эта ошибка отобразится в случае если не удалось найти изображение
+            e.printStackTrace();
+        }
+
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case ADD_CATEGORY:
+                if (resultCode == RESULT_OK) {
+                    Bundle arguments = data.getExtras();
+                    Category category = (Category) arguments.getParcelable(Category.class.getSimpleName());
+
+                }
+                break;
+            case REQUEST_CODE_BACK_PHOTO:
+            case REQUEST_CODE_FRONT_PHOTO:
+                showImage(requestCode, data);
+                break;
+
+
+        }
+    }
+
+    private void chooseImagGromGallery(int requestCode) {
+        // Интент для получения всех приложений которые могут отображать изображения
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        // Вызываем системное диалоговое окно для выбора приложения, которое умеет отображать изображения
+        // и возвращать выбранную фотографию
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Выберите изображение");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+        // Запускаем приложения и ожидаем результат
+        startActivityForResult(chooserIntent, requestCode);
+    }
+                @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return true;

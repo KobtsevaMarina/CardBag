@@ -46,6 +46,62 @@
             android:hint="Процент скидки"
             android:inputType="number"
             />
+        <LinearLayout
+            android:id="@+id/llPhoto"
+            android:layout_below="@id/etSale"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/flFronPhoto"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/ivPhotoFront"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#333333"
+                    android:layout_margin="4dp"/>
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_camera"
+                    android:id="@+id/ivTakePhotoFrontCard"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flBackPhoto"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="100dp"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/ivPhotoBack"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"
+                    android:layout_margin="4dp"/>
+
+                <ImageView
+                    android:src="@drawable/ic_camera"
+                    android:id="@+id/ivTakePhotoBackCard"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
         <Button
             android:layout_marginTop="28dp"
             android:background="@color/colorAccent"
@@ -56,7 +112,7 @@
             android:layout_height="wrap_content"
             android:onClick="btnAddCardClick"
             android:id="@+id/btnAddCard"
-            android:layout_below="@id/etSale"
+            android:layout_below="@id/llPhoto"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="15dp"
             android:text="Сохранить"/>
