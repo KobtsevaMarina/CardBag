@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity  {
     private RealmResults<CardRealm> getCardList() {
         try{
         RealmResults<CardRealm> result = getDefaultInstance().where(CardRealm.class).findAll();
-
+            return  result;
         }
         catch (Exception ex){
             String message = ex.getMessage();

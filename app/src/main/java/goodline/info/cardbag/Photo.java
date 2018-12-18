@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class Photo implements Parcelable {
     private long imageID;
-
+    //private long test;
     public Photo(){
 
         imageID = 0;

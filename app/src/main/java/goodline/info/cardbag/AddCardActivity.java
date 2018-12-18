@@ -70,9 +70,9 @@ public class AddCardActivity extends AppCompatActivity {
         ivPhotoBack = findViewById(R.id.ivPhotoBack);
         long currentTime = System.currentTimeMillis();
 
-        card.photoList = new ArrayList<>();
-       // card.photoList.add(photoFront);
-       // card.photoList.add(photoBack);
+       /* card.photoList = new ArrayList<>();
+        card.photoList.add(photoFront);
+        card.photoList.add(photoBack);*/
     }
 
     private void showImage(int requestCode, Intent data) {
