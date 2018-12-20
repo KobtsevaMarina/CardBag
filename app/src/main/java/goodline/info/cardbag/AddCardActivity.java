@@ -28,7 +28,7 @@ import io.realm.Realm;
 public class AddCardActivity extends AppCompatActivity {
 
     private Card card;
-    private List<Integer> photos;
+    private List<Photo> photoList;
     private EditText etNameCard;
     private EditText etCategory;
     private EditText etSale;
@@ -37,6 +37,7 @@ public class AddCardActivity extends AppCompatActivity {
     private final int REQUEST_CODE_FRONT_PHOTO = 1;
     private final int REQUEST_CODE_BACK_PHOTO = 2;
     ImageView ivPhotoFront, ivPhotoBack;
+    Photo photoFront, photoBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +71,8 @@ public class AddCardActivity extends AppCompatActivity {
         ivPhotoBack = findViewById(R.id.ivPhotoBack);
         long currentTime = System.currentTimeMillis();
 
-       /* card.photoList = new ArrayList<>();
-        card.photoList.add(photoFront);
-        card.photoList.add(photoBack);*/
+       photoBack=new Photo();
+       photoFront = new Photo();
     }
 
     private void showImage(int requestCode, Intent data) {
@@ -86,9 +86,12 @@ public class AddCardActivity extends AppCompatActivity {
             switch (requestCode) {
                 case REQUEST_CODE_FRONT_PHOTO:
                     ivPhotoFront.setImageBitmap(selectedImage);
+                    photoFront.setImageID(System.currentTimeMillis());
+
                     break;
                 case REQUEST_CODE_BACK_PHOTO:
                     ivPhotoBack.setImageBitmap(selectedImage);
+                    photoBack.setImageID(System.currentTimeMillis());
                     break;
             }
 
@@ -107,10 +110,16 @@ public class AddCardActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     Bundle arguments = data.getExtras();
                     Category category = (Category) arguments.getParcelable(Category.class.getSimpleName());
-
+                    if (arguments == null||category==null) {
+                        return;
+                    }
+                    else {
+                        etCategory.setText(category.getName());
+                    }
                 }
+
                 break;
-            case REQUEST_CODE_BACK_PHOTO:
+        case REQUEST_CODE_BACK_PHOTO:
             case REQUEST_CODE_FRONT_PHOTO:
                 showImage(requestCode, data);
                 break;
@@ -141,10 +150,11 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     public void btnAddCardClick(View view) {
-        List<Photo> photoList = Arrays.asList(
-                new Photo(R.drawable.card_lenta),
-                new Photo(R.drawable.card_lenta_back)
-        );
+
+           photoList = Arrays.asList(
+               photoFront,
+               photoBack
+       );
 
         card.setNameCard(etNameCard.getText().toString());
         Random random = new Random();
@@ -166,7 +176,6 @@ public class AddCardActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Card.class.getSimpleName(), card);
         setResult(RESULT_OK,intent);
-        startActivity(intent);
         finish();
     }
 

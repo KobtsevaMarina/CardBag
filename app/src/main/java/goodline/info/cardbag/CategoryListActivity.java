@@ -114,7 +114,7 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
     @Override
     public void onItemClick(Category item) {
 
-        Intent intent = new Intent(this, AddCardActivity.class);
+        Intent intent = new Intent();
         intent.putExtra(Category.class.getSimpleName(), item);
         setResult(RESULT_OK, intent);
         finish();

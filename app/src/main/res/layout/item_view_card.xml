@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true">
     <android.support.v7.widget.CardView
-        android:id="@+id/cvImageCardFront"
+        android:id="@+id/cvImageCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -18,7 +18,7 @@
         android:layout_marginBottom="20dp">
 
         <ImageView
-            android:id="@+id/ivImageCardFront"
+            android:id="@+id/ivImageCard"
             android:layout_width="270dp"
             android:layout_height="190dp"
             android:scaleType="centerCrop"

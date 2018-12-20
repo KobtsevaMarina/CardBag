@@ -10,6 +10,6 @@ public class ImageCardVH extends RecyclerView.ViewHolder {
 
     public ImageCardVH(@NonNull View itemView) {
         super(itemView);
-        this.imageFront = itemView.findViewById(R.id.ivImageCardFront);
+        this.imageFront = itemView.findViewById(R.id.ivImageCard);
     }
 }

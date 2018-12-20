@@ -18,6 +18,7 @@ public class App extends Application {
                 .schemaVersion(version) // Must be bumped when the schema changes
                 .migration(new Migration()) // Migration to run instead of throwing an exception
                 .build();
+        Realm.setDefaultConfiguration(config);
     }
 
     @Override

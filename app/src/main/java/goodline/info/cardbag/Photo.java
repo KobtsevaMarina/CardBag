@@ -6,6 +6,11 @@ import android.os.Parcelable;
 public class Photo implements Parcelable {
     private long imageID;
     //private long test;
+
+    public void setImageID(long imageID) {
+        this.imageID = imageID;
+    }
+
     public Photo(){
 
         imageID = 0;
@@ -18,7 +23,7 @@ public class Photo implements Parcelable {
 
 
     protected Photo(Parcel in) {
-        imageID = in.readInt();
+        imageID = in.readLong();
     }
 
     public static final Creator<Photo> CREATOR = new Creator<Photo>() {

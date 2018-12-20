@@ -7,10 +7,10 @@ import android.view.View;
 import android.widget.ImageView;
 
 public class PhotoViewHolder extends RecyclerView.ViewHolder {
-    public ImageView ivCardFront;
+    public ImageView ivCard;
     public PhotoViewHolder(@NonNull View itemView) {
         super(itemView);
-        this.ivCardFront = itemView.findViewById(R.id.ivImageCardFront);
+        this.ivCard = itemView.findViewById(R.id.ivImageCard);
 
     }
 }

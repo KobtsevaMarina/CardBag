@@ -40,24 +40,25 @@ public class MainActivity extends AppCompatActivity  {
 
         cardList = new ArrayList<>();
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
-        cardList = map2DataList(getCardList());
+        try {
+            cardList = map2DataList(getCardList());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         if (cardList == null || cardList.isEmpty()){
             isCard(false);
         }
+        else
+            isCard(true);
 
         adapter = new CardsAdapter(this, cardList);
         rvCardList.setAdapter(adapter);
     }
     private RealmResults<CardRealm> getCardList() {
-        try{
-        RealmResults<CardRealm> result = getDefaultInstance().where(CardRealm.class).findAll();
-            return  result;
-        }
-        catch (Exception ex){
-            String message = ex.getMessage();
-        }
-        return  null;
+        return getDefaultInstance().where(CardRealm.class).findAll();
     }
     public void isCard(boolean isCard) {
         if(!isCard){
@@ -98,8 +99,7 @@ public class MainActivity extends AppCompatActivity  {
     }
     public void btnAddCardClick(View view) {
         Intent intent = new Intent(this, AddCardActivity.class);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, ADD_CARD);
     }
     private List<Card> map2DataList(List<CardRealm> realmList) {
         List<Card> cards = new ArrayList<>();

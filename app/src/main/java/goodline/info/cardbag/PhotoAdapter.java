@@ -1,12 +1,16 @@
 package goodline.info.cardbag;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.File;
 import java.util.List;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
@@ -30,7 +34,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder viewHolder, int position) {
-        final Photo photo = photos.get(position);
+        File imgFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" +
+                photos.get(position).getImageID() + ".jpg"
+        );
+
+        if (imgFile.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            viewHolder.ivCard.setImageBitmap(myBitmap);
+        }
         //viewHolder.ivCardFront.setImageDrawable(context.getResources().getDrawable(photo.getImageID()));
     }
 
