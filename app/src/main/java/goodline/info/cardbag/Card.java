@@ -42,6 +42,7 @@ public class Card implements Parcelable {
     }
 
     protected Card(Parcel in) {
+        id=in.readInt();
         nameCard = in.readString();
         category = (Category) in.readParcelable(Category.class.getClassLoader());
         sale = in.readString();

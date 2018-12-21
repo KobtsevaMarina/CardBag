@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity  {
             return;
         }
         else try{
+            if(data == null||data.getExtras()==null)
+                return;
             Bundle arguments = data.getExtras();
             Card card=(Card) arguments.getParcelable(Card.class.getSimpleName());
 

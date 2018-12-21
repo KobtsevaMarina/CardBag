@@ -1,22 +1,32 @@
 package goodline.info.cardbag;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import io.realm.RealmList;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +37,7 @@ import io.realm.Realm;
 
 public class AddCardActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_IMAGE_CAPTURE = 3;
     private Card card;
     private List<Photo> photoList;
     private EditText etNameCard;
@@ -37,7 +48,8 @@ public class AddCardActivity extends AppCompatActivity {
     private final int REQUEST_CODE_FRONT_PHOTO = 1;
     private final int REQUEST_CODE_BACK_PHOTO = 2;
     ImageView ivPhotoFront, ivPhotoBack;
-    Photo photoFront, photoBack;
+    private File currentImageFile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +61,7 @@ public class AddCardActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        initDefaultCard();
 
         etNameCard = findViewById(R.id.etNameCard);
         etCategory = findViewById(R.id.etCategory);
@@ -57,23 +70,92 @@ public class AddCardActivity extends AppCompatActivity {
         findViewById(R.id.flFronPhoto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseImagGromGallery(REQUEST_CODE_FRONT_PHOTO);
+                showImageSelectionDialog(REQUEST_CODE_FRONT_PHOTO);
             }
         });
 
         findViewById(R.id.flBackPhoto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseImagGromGallery(REQUEST_CODE_BACK_PHOTO);
+                showImageSelectionDialog(REQUEST_CODE_BACK_PHOTO);
             }
         });
         ivPhotoFront = findViewById(R.id.ivPhotoFront);
         ivPhotoBack = findViewById(R.id.ivPhotoBack);
         long currentTime = System.currentTimeMillis();
 
-       photoBack=new Photo();
-       photoFront = new Photo();
     }
+
+    @Nullable
+    private File createImageFile() {
+        // Генерируем имя файла
+        String filename = System.currentTimeMillis() + ".jpg";
+
+        // Получаем приватную директорию на карте памяти для хранения изображений
+        // Выглядит она примерно так:
+        // /sdcard/Android/data/info.goodline.department.learnandroid./files/Pictures
+        // Директория будет создана автоматически, если ещё не существует
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        // Создаём файл
+        File image = new File(storageDir, filename);
+        try {
+            if (image.createNewFile()) {
+                return image;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    private void takePhoto(int requestCode) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (intent.resolveActivity(getPackageManager()) == null) {
+            Toast.makeText(this,
+                    "На вашем устройстве недоступна камера",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return;
+        }
+
+
+        // Создаём файл для изображения
+        currentImageFile = createImageFile();
+
+        if (currentImageFile != null) {
+            // Если файл создался — получаем его URI
+            Uri imageUri = FileProvider.getUriForFile(
+                    this,
+                    BuildConfig.APPLICATION_ID + ".fileprovider",
+                    currentImageFile
+            );
+
+            // Передаём URI в камеру
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(intent, requestCode);
+        }
+    }
+    private void showImageSelectionDialog(int requestCode) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setItems(R.array.attachment_variants, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            chooseImagGromGallery(requestCode);
+                        } else if (which == 1) {
+                            takePhoto(requestCode);
+                        }
+                    }
+                })
+                .create();
+
+        if (!isFinishing()) {
+            alertDialog.show();
+        }
+    }
+
 
     private void showImage(int requestCode, Intent data) {
         try {
@@ -81,17 +163,16 @@ public class AddCardActivity extends AppCompatActivity {
             //объект и отображаем в элементе ImageView нашего интерфейса:
             final Uri imageUri = data.getData();
             final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
             switch (requestCode) {
                 case REQUEST_CODE_FRONT_PHOTO:
                     ivPhotoFront.setImageBitmap(selectedImage);
-                    photoFront.setImageID(System.currentTimeMillis());
 
                     break;
                 case REQUEST_CODE_BACK_PHOTO:
                     ivPhotoBack.setImageBitmap(selectedImage);
-                    photoBack.setImageID(System.currentTimeMillis());
                     break;
             }
 
@@ -108,14 +189,16 @@ public class AddCardActivity extends AppCompatActivity {
         switch (requestCode) {
             case ADD_CATEGORY:
                 if (resultCode == RESULT_OK) {
+                    if(data == null||data.getExtras()==null)
+                        return;
                     Bundle arguments = data.getExtras();
                     Category category = (Category) arguments.getParcelable(Category.class.getSimpleName());
-                    if (arguments == null||category==null) {
+                    if (category==null) {
                         return;
                     }
-                    else {
+                    card.setCategory(category);
                         etCategory.setText(category.getName());
-                    }
+
                 }
 
                 break;
@@ -149,20 +232,50 @@ public class AddCardActivity extends AppCompatActivity {
         return true;
     }
 
+    private void copyPhoto(String fileName, Bitmap img) {
+        try (FileOutputStream out = new FileOutputStream(fileName)) {
+            img.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private Bitmap getBitmap(ImageView iv) {
+        iv.invalidate();
+        BitmapDrawable btmpDrawable = (BitmapDrawable) iv.getDrawable();
+        return btmpDrawable.getBitmap();
+    }
+    private void initDefaultCard() {
+        card = new Card();
+        long currentTime =  System.currentTimeMillis();
+        Photo front = new Photo(currentTime+1);
+        Photo back = new Photo(currentTime+2);
+        photoList= new ArrayList<>();
+        photoList.add(front);
+        photoList.add(back);
+        card.setPhotoList(photoList);
+    }
     public void btnAddCardClick(View view) {
 
-           photoList = Arrays.asList(
-               photoFront,
-               photoBack
-       );
 
         card.setNameCard(etNameCard.getText().toString());
         Random random = new Random();
         int id = random.nextInt(200000);
-        Category category = new Category(id,etCategory.getText().toString());
-        card.setCategory(category);
+        card.setId(id);
         card.setSale("Скидка "+etSale.getText().toString()+"%");
         card.setPhotoList(photoList);
+
+        String folder = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/";
+
+        copyPhoto(
+
+                folder + card.getPhotoList().get(0).getImageID()+ ".jpg",
+                getBitmap(ivPhotoFront)
+        );
+        copyPhoto(
+                folder + card.getPhotoList().get(1).getImageID()+".jpg",
+                getBitmap(ivPhotoBack)
+        );
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -209,23 +322,4 @@ public class AddCardActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CategoryListActivity.class);
             startActivityForResult(intent,ADD_CATEGORY);
     }
-   /* protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data == null) {
-            return;
-        }
-        else try{
-            Bundle arguments = data.getExtras();
-            Category category = (Category) arguments.getParcelable(Category.class.getSimpleName());
-            if (arguments == null||category==null||resultCode!=RESULT_OK) {
-                return;
-            }
-            else {
-                etCategory.setText(category.getName());
-            }
-        }
-        catch (Exception ex){
-            Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
-        }
-    }*/
 }
