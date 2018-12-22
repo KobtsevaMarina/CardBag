@@ -188,70 +188,58 @@ public class AddCardActivity extends AppCompatActivity {
         return bitmap;
     }
     private void showImage(int requestCode, Intent data) {
-        if(data==null){
-            switch (requestCode) {
-                case REQUEST_CODE_FRONT_PHOTO:
-                        ivPhotoFront.setImageBitmap(BitmapFactory.decodeFile(currentImageFile.getAbsolutePath()));
+        Bitmap selectedImage = createBitmap(data);
+        if (selectedImage == null)
+            return;
 
-                    break;
-                case REQUEST_CODE_BACK_PHOTO:
-                        ivPhotoBack.setImageBitmap(BitmapFactory.decodeFile(currentImageFile.getAbsolutePath()));
-                    break;
-
-            }
-        } else {
-            try {
-                //Получаем URI изображения, преобразуем его в Bitmap
-                //объект и отображаем в элементе ImageView нашего интерфейса:
-
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-
-                switch (requestCode) {
-                    case REQUEST_CODE_FRONT_PHOTO:
-                        ivPhotoFront.setImageBitmap(selectedImage);
-                        break;
-                    case REQUEST_CODE_BACK_PHOTO:
-                        ivPhotoBack.setImageBitmap(selectedImage);
-                        break;
-
-                }
-
-            } catch (FileNotFoundException e) {
-                // Эта ошибка отобразится в случае если не удалось найти изображение
-                e.printStackTrace();
-            }
+        switch (requestCode) {
+            case REQUEST_CODE_FRONT_PHOTO:
+                ivPhotoFront.setImageBitmap(selectedImage);
+                break;
+            case REQUEST_CODE_BACK_PHOTO:
+                ivPhotoBack.setImageBitmap(selectedImage);
+                break;
         }
+    }
+
+    private Bitmap createBitmap(Intent data) {
+        if (data == null) {
+            return BitmapFactory.decodeFile(currentImageFile.getAbsolutePath());
+        }
+        else try {
+            final Uri imageUri = data.getData();
+            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            return BitmapFactory.decodeStream(imageStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
         switch (requestCode) {
             case ADD_CATEGORY:
-                if (resultCode == RESULT_OK) {
-                    if(data == null||data.getExtras()==null)
-                        return;
-                    Bundle arguments = data.getExtras();
-                    Category category = (Category) arguments.getParcelable(Category.class.getSimpleName());
-                    if (category==null) {
-                        return;
-                    }
-                    card.setCategory(category);
-                        etCategory.setText(category.getName());
+                if(data == null||data.getExtras()==null)
+                    return;
 
+                Bundle arguments = data.getExtras();
+                Category category = (Category) arguments.getParcelable(Category.class.getSimpleName());
+
+                if (category==null) {
+                    return;
                 }
 
+                card.setCategory(category);
+                etCategory.setText(category.getName());
                 break;
-        case REQUEST_CODE_BACK_PHOTO:
-            case REQUEST_CODE_FRONT_PHOTO:
-                showImage(requestCode, data);
-                break;
-
-
-        }
+            case REQUEST_CODE_BACK_PHOTO:
+                case REQUEST_CODE_FRONT_PHOTO:
+                    showImage(requestCode, data);
+                    break;
+        }}
     }
 
     private void chooseImagGromGallery(int requestCode) {
@@ -324,7 +312,7 @@ public class AddCardActivity extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(cardMap2Realm(card));
+                realm.copyToRealmOrUpdate(CardMapper.cardMap2Realm(card));
             }
         });
         realm.close();
@@ -335,32 +323,7 @@ public class AddCardActivity extends AppCompatActivity {
         finish();
     }
 
-    private CardRealm cardMap2Realm(Card card) {
-        CardRealm cardRealm = new CardRealm();
-        cardRealm.setId(card.getId());
-        cardRealm.setNameCard(card.getNameCard());
-        cardRealm.setSale(card.getSale());
-        cardRealm.setCategory(categoreMap2Realm(card.getCategory()));
-        cardRealm.setPhotoList(photoMap2Realm(card.getPhotoList()));
-        return cardRealm;
-    }
-    private RealmList<PhotoRealm> photoMap2Realm(List <Photo> photo)
-    {
-        RealmList <PhotoRealm> photoRealm = new RealmList<>();
-        for(Photo photos: photo) {
-            PhotoRealm photoRealm1 = new PhotoRealm();
-            photoRealm1.setImageID(photos.getImageID());
-            photoRealm.add(photoRealm1);
-        }
-        return photoRealm;
-    }
 
-    private CategoryRealm categoreMap2Realm(Category category) {
-        CategoryRealm categoryRealm = new CategoryRealm();
-        categoryRealm.setId(category.getId());
-        categoryRealm.setName(category.getName());
-        return categoryRealm;
-    }
     public void etCategoryClick(View view) {
             Intent intent = new Intent(this, CategoryListActivity.class);
             startActivityForResult(intent,ADD_CATEGORY);

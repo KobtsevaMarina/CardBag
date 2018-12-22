@@ -44,7 +44,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsVH>{
         cardsVH.tvCategory.setText(cardItem.getCategory().getName());
         cardsVH.tvSale.setText(cardItem.getSale());
 
-        mainActivity.isCard(true);
+        mainActivity.showCardList(true);
     }
     public void insertItem(Card item) {
         int itemLast = cards.size();

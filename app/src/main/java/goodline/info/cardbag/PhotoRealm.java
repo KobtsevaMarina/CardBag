@@ -7,7 +7,6 @@ public class PhotoRealm extends RealmObject {
 
     @PrimaryKey
     private long imageID;
-    //private long test;
 
     public long getImageID() {
         return imageID;

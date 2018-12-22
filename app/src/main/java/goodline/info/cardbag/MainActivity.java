@@ -6,16 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 import static io.realm.Realm.getDefaultInstance;
@@ -37,102 +35,67 @@ public class MainActivity extends AppCompatActivity  {
         rvCardList = (RecyclerView) findViewById(R.id.rvCardList);
 
         noCard.setVisibility(View.VISIBLE);
-
-        cardList = new ArrayList<>();
         rvCardList.setLayoutManager(new LinearLayoutManager(this));
-        try {
-            cardList = map2DataList(getCardList());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 
-        if (cardList == null || cardList.isEmpty()){
-            isCard(false);
-        }
-        else
-            isCard(true);
-
-        adapter = new CardsAdapter(this, cardList);
+        loadCardList();
         rvCardList.setAdapter(adapter);
+    }
+    private void loadCardList(){
+        RealmResults<CardRealm> result = getDefaultInstance().where(CardRealm.class).findAll();
+        if (result.isEmpty()) {
+            // Карточек нет
+            showCardList(false);
+            return;
+        }
+        cardList = new ArrayList<>();
+        cardList = CardMapper.map2DataList(result);
+        adapter = new CardsAdapter(this, cardList);
+        showCardList(true);
     }
     private RealmResults<CardRealm> getCardList() {
         return getDefaultInstance().where(CardRealm.class).findAll();
     }
-    public void isCard(boolean isCard) {
-        if(!isCard){
-            rvCardList.setVisibility(View.GONE);
-            noCard.setVisibility(View.VISIBLE);
-        }
-        else {
-            noCard.setVisibility(View.GONE);
-            rvCardList.setVisibility(View.VISIBLE);
-        }
+    public void showCardList(boolean enableList) {
+        rvCardList.setVisibility(enableList ? View.VISIBLE : View.GONE);
+        noCard.setVisibility(enableList? View.GONE: View.VISIBLE);
     }
 
    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data == null) {
-            return;
-        }
-        else try{
-            if(data == null||data.getExtras()==null)
+         try{
+            if(data == null||data.getExtras()==null||resultCode!=RESULT_OK)
                 return;
+
             Bundle arguments = data.getExtras();
             Card card=(Card) arguments.getParcelable(Card.class.getSimpleName());
 
-            if (arguments == null||card==null||resultCode!=RESULT_OK) {
+            if (arguments == null||card==null)
                 return;
-            }
+
             else {
-                isCard(true);
+                showCardList(true);
                 try {
                     adapter.insertItem(card);
                 }
-                catch (Exception ex){
-                    Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
+                catch (Exception exception){
+                    Toast.makeText(this,"Не удалось загрузить данные",Toast.LENGTH_LONG);
+                    Log.e("Error: onActivityResult", exception.getMessage());
+                    exception.printStackTrace();
                 }}
         }
-        catch (Exception ex){
-            Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG);
+        catch (Exception exception){
+            Toast.makeText(this,"Не удалось загрузить данные",Toast.LENGTH_LONG);
+            Log.e("Error: onActivityResult", exception.getMessage());
+            exception.printStackTrace();
         }
     }
     public void btnAddCardClick(View view) {
         Intent intent = new Intent(this, AddCardActivity.class);
         startActivityForResult(intent, ADD_CARD);
     }
-    private List<Card> map2DataList(List<CardRealm> realmList) {
-        List<Card> cards = new ArrayList<>();
-        for (CardRealm cardRealm : realmList) {
-            Card card = new Card (
-                    cardRealm.getId(),
-                    cardRealm.getNameCard(),
-                    categoryMap2Data(cardRealm.getCategory()),
-                    cardRealm.getSale(),
-            (ArrayList) photoMap2Data(cardRealm.getPhotoList())
-            );
-            cards.add(card);
-        }
-        return cards;
-    }
 
-    private List<Photo> photoMap2Data(List<PhotoRealm> realmList) {
-        List<Photo> photos = new ArrayList<>();
-        for (PhotoRealm photoRealm : realmList) {
-            Photo photo = new Photo(
-                    photoRealm.getImageID()
-            );
-            photos.add(photo);
-        }
-        return photos;
-    }
-    private Category categoryMap2Data(CategoryRealm categoryRealm) {
-        Category category = new Category();
-        category.setId(categoryRealm.getId());
-        category.setName(categoryRealm.getName());
-        return category;
-    }
+
+
 }
 

@@ -39,22 +39,15 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
         List <CategoryRealm> categoriesLocal = null;
         List<Category> categories = new ArrayList<>();
 
-        //categoriesLocal = getCategoriesFromLocal();
-        //categoriesRest = getCategoriesFromRemote();
-        categoriesLocal = getCategoriesFromLocal();
-
-        //if(categoriesLocal == null || categoriesLocal.isEmpty())
-        //{
         categoriesRest = getCategoriesFromRemote();
         addCategories(categoriesRest);
-        //}
+
         if(categoriesRest == null) {
             Toast.makeText(this, "Ошибка сервера", Toast.LENGTH_LONG).show();
             return;
         }
-        if(categoriesRest!=null) {
             addCategories(categoriesRest);
-        }
+
 
         categoriesLocal = getCategoriesFromLocal();
         categories  = map2DataList(categoriesLocal);
@@ -97,12 +90,9 @@ public class CategoryListActivity extends AppCompatActivity implements CategoryL
 
     }
 
-    private void addCategories(List<Category>  list) {
+    private void addCategories(List<Category> list) {
        final List<CategoryRealm> realmList = map2RealmList(list);
         Realm realm = Realm.getDefaultInstance();
-        //realm.beginTransaction();
-
-        //realm.commitTransaction();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
