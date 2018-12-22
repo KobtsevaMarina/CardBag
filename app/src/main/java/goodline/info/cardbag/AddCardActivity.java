@@ -191,11 +191,11 @@ public class AddCardActivity extends AppCompatActivity {
         if(data==null){
             switch (requestCode) {
                 case REQUEST_CODE_FRONT_PHOTO:
-                        ivPhotoFront.setImageBitmap(getBitmap());
+                        ivPhotoFront.setImageBitmap(BitmapFactory.decodeFile(currentImageFile.getAbsolutePath()));
 
                     break;
                 case REQUEST_CODE_BACK_PHOTO:
-                        ivPhotoBack.setImageBitmap(getBitmap());
+                        ivPhotoBack.setImageBitmap(BitmapFactory.decodeFile(currentImageFile.getAbsolutePath()));
                     break;
 
             }
