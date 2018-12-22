@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#EDEDED"
     android:orientation="vertical">
 
@@ -48,62 +49,103 @@
             />
         <LinearLayout
             android:id="@+id/llPhoto"
+            android:layout_marginTop="4dp"
             android:layout_below="@id/etSale"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp">
 
-            <FrameLayout
+            <android.support.v7.widget.CardView
                 android:id="@+id/flFronPhoto"
                 android:clickable="true"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:focusable="true">
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                app:cardCornerRadius="15dp"
+                android:layout_marginRight="3dp">
+
 
                 <ImageView
                     android:id="@+id/ivPhotoFront"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="100dp"
                     android:background="#333333"
-                    android:layout_margin="4dp"/>
-
+                    android:scaleType="centerCrop" />
+                <ImageView
+                    android:src="@drawable/ic_camera_arrow"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"/>
                 <ImageView
                     android:layout_gravity="center"
                     android:src="@drawable/ic_camera"
                     android:id="@+id/ivTakePhotoFrontCard"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp" />
+                    android:layout_width="26dp"
+                    android:layout_height="26dp" />
 
-            </FrameLayout>
 
-            <FrameLayout
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:id="@+id/flBackPhoto"
                 android:clickable="true"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="100dp"
-                android:focusable="true">
+                android:focusable="true"
+                app:cardCornerRadius="15dp"
+                android:layout_marginLeft="3dp">
 
                 <ImageView
                     android:id="@+id/ivPhotoBack"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"
-                    android:layout_margin="4dp"/>
-
+                    android:background="@color/colorPrimary" />
                 <ImageView
-                    android:src="@drawable/ic_camera"
-                    android:id="@+id/ivTakePhotoBackCard"
+                    android:src="@drawable/ic_camera_arrow"
                     android:layout_width="38dp"
                     android:layout_height="38dp"
                     android:layout_gravity="center"/>
 
-            </FrameLayout>
+                <ImageView
+                    android:src="@drawable/ic_camera"
+                    android:id="@+id/ivTakePhotoBackCard"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center"/>
+
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/llPhoto"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="47dp"
+            android:layout_marginTop="15dp"
+            android:text="Лицевая сторона"
+            android:textSize="14sp">
+
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/llPhoto"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="43dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:text="Тыльная сторона"
+            android:textSize="14sp">
+
+        </TextView>
         <Button
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="54dp"
             android:background="@color/colorAccent"
             android:textColor="#FFFFFF"
             android:textSize="17sp"
@@ -115,6 +157,6 @@
             android:layout_below="@id/llPhoto"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="15dp"
-            android:text="Сохранить"/>
+            android:text="Сохранить карту"/>
     </RelativeLayout>
 </LinearLayout>
